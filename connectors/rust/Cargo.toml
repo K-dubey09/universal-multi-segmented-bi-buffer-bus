@@ -1,0 +1,28 @@
+[package]
+name = "umsbb-connector"
+version = "4.0.0"
+edition = "2021"
+authors = ["UMSBB Team"]
+description = "Universal Multi-Segmented Bi-directional Buffer Bus - Rust Connector"
+license = "MIT"
+keywords = ["buffer", "message-queue", "performance", "webassembly"]
+categories = ["data-structures", "concurrency"]
+
+[dependencies]
+lazy_static = "1.4"
+
+[dev-dependencies]
+tokio = { version = "1.0", features = ["full"] }
+
+[lib]
+name = "umsbb_connector"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "umsbb_test"
+path = "src/main.rs"
+
+[features]
+default = []
+wasm = []
+async = ["tokio"]

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMSBB Simple Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 UMSBB WebAssembly - Simple Example</h1>
+        <p>This demonstrates the UMSBB WebAssembly core in action with just a few lines of code!</p>
+        
+        <div>
+            <button id="initBtn">Initialize UMSBB</button>
+            <button id="createBufferBtn" disabled>Create Buffer</button>
+            <button id="sendMsgBtn" disabled>Send Message</button>
+            <button id="perfTestBtn" disabled>Performance Test</button>
+            <button id="cleanupBtn" disabled>Cleanup</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="totalMessages">0</div>
+                <div class="stat-label">Total Messages</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="totalBytes">0</div>
+                <div class="stat-label">Total Bytes</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="pendingMessages">0</div>
+                <div class="stat-label">Pending Messages</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="throughput">0</div>
+                <div class="stat-label">Messages/sec</div>
+            </div>
+        </div>
+
+        <div class="log" id="log">
+Click "Initialize UMSBB" to start...
+        </div>
+    </div>
+
+    <!-- Include the UMSBB WebAssembly core -->
+    <script src="umsbb_core.js"></script>
+    
+    <script>
+        let wasmCore = null;
+        let bufferId = -1;
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.textContent += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStats() {
+            if (!wasmCore || bufferId === -1) return;
+            
+            try {
+                const totalMessages = wasmCore.ccall('umsbb_get_total_messages', 'number', ['number'], [bufferId]);
+                const totalBytes = wasmCore.ccall('umsbb_get_total_bytes', 'number', ['number'], [bufferId]);
+                const pendingMessages = wasmCore.ccall('umsbb_get_pending_messages', 'number', ['number'], [bufferId]);
+
+                document.getElementById('totalMessages').textContent = totalMessages.toLocaleString();
+                document.getElementById('totalBytes').textContent = formatBytes(totalBytes);
+                document.getElementById('pendingMessages').textContent = pendingMessages.toLocaleString();
+            } catch (error) {
+                log(`Stats error: ${error.message}`);
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Initialize UMSBB
+        document.getElementById('initBtn').onclick = async function() {
+            try {
+                log('🔧 Loading UMSBB WebAssembly core...');
+                wasmCore = await UMSBBCore();
+                
+                const result = wasmCore.ccall('umsbb_init_system', 'number', [], []);
+                if (result === 0) {
+                    log('✅ UMSBB system initialized successfully!');
+                    
+                    const versionPtr = wasmCore.ccall('umsbb_get_version', 'number', [], []);
+                    const version = wasmCore.UTF8ToString(versionPtr);
+                    log(`📋 Version: ${version}`);
+                    
+                    this.disabled = true;
+                    document.getElementById('createBufferBtn').disabled = false;
+                } else {
+                    log('❌ Failed to initialize UMSBB system');
+                }
+            } catch (error) {
+                log(`❌ Error loading WebAssembly: ${error.message}`);
+                log('💡 Make sure umsbb_core.js and umsbb_core.wasm are in the same directory');
+            }
+        };
+
+        // Create Buffer
+        document.getElementById('createBufferBtn').onclick = function() {
+            try {
+                bufferId = wasmCore.ccall('umsbb_create_buffer', 'number', 
+                    ['number', 'number'], [1024*1024, 8]);
+                
+                if (bufferId >= 0) {
+                    log(`📦 Buffer created with ID: ${bufferId} (1MB segments x 8)`);
+                    this.disabled = true;
+                    document.getElementById('sendMsgBtn').disabled = false;
+                    document.getElementById('perfTestBtn').disabled = false;
+                    document.getElementById('cleanupBtn').disabled = false;
+                    
+                    // Start stats updates
+                    setInterval(updateStats, 1000);
+                } else {
+                    log('❌ Failed to create buffer');
+                }
+            } catch (error) {
+                log(`❌ Error creating buffer: ${error.message}`);
+            }
+        };
+
+        // Send Message
+        document.getElementById('sendMsgBtn').onclick = function() {
+            try {
+                const messages = [
+                    "Hello UMSBB WebAssembly!",
+                    "High-performance messaging",
+                    "Lock-free buffer architecture", 
+                    "Cross-platform compatibility",
+                    "Optimized for speed"
+                ];
+                
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                const result = wasmCore.ccall('umsbb_write_message', 'number',
+                    ['number', 'string', 'number'], [bufferId, message, message.length]);
+                
+                if (result === 0) {
+                    log(`📤 Message sent: "${message}"`);
+                } else {
+                    log(`❌ Failed to send message (error: ${result})`);
+                }
+            } catch (error) {
+                log(`❌ Error sending message: ${error.message}`);
+            }
+        };
+
+        // Performance Test
+        document.getElementById('perfTestBtn').onclick = function() {
+            try {
+                log('🚀 Running performance test (10,000 messages)...');
+                const startTime = Date.now();
+                
+                const result = wasmCore.ccall('umsbb_run_performance_test', 'number',
+                    ['number', 'number', 'number'], [bufferId, 10000, 64]);
+                
+                const endTime = Date.now();
+                const duration = (endTime - startTime) / 1000;
+                const throughput = Math.round(result / duration);
+                
+                log(`✅ Performance test completed!`);
+                log(`📊 Messages: ${result.toLocaleString()}`);
+                log(`⏱️ Duration: ${duration.toFixed(2)}s`);
+                log(`🔥 Throughput: ${throughput.toLocaleString()} messages/second`);
+                
+                document.getElementById('throughput').textContent = throughput.toLocaleString();
+            } catch (error) {
+                log(`❌ Error in performance test: ${error.message}`);
+            }
+        };
+
+        // Cleanup
+        document.getElementById('cleanupBtn').onclick = function() {
+            try {
+                if (bufferId >= 0) {
+                    const result = wasmCore.ccall('umsbb_destroy_buffer', 'number', ['number'], [bufferId]);
+                    if (result === 0) {
+                        log('🗑️ Buffer destroyed successfully');
+                        bufferId = -1;
+                    }
+                }
+                
+                wasmCore.ccall('umsbb_shutdown_system', 'number', [], []);
+                log('🔄 UMSBB system shutdown');
+                
+                // Reset buttons
+                document.getElementById('initBtn').disabled = false;
+                document.getElementById('createBufferBtn').disabled = true;
+                document.getElementById('sendMsgBtn').disabled = true;
+                document.getElementById('perfTestBtn').disabled = true;
+                this.disabled = true;
+                
+                // Reset stats
+                document.getElementById('totalMessages').textContent = '0';
+                document.getElementById('totalBytes').textContent = '0';
+                document.getElementById('pendingMessages').textContent = '0';
+                document.getElementById('throughput').textContent = '0';
+                
+            } catch (error) {
+                log(`❌ Error during cleanup: ${error.message}`);
+            }
+        };
+
+        log('🌐 UMSBB Simple Example ready!');
+        log('💡 This page demonstrates single .wasm file integration');
+    </script>
+</body>
+</html>
