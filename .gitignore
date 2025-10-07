@@ -1,13 +1,9 @@
 # Build artifacts
 *build/
-*.exe
-*.obj
 *.dll
 *.lib
 *.pdb
 *.exp
-*.o
-*.wasm
 
 # Log files
 *.log
