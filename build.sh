@@ -1,0 +1,1 @@
+g++ -std=c++17 -O2 main.cpp RingBufferTestGUI.cpp imgui/imgui*.cpp imgui/backends/imgui_impl_glfw.cpp imgui/backends/imgui_impl_opengl3.cpp -Iimgui -Iimgui/backends -lglfw3 -lopengl32 -lgdi32 -o ringbuffer_gui

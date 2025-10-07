@@ -1,0 +1,33 @@
+# Build artifacts
+*build/
+*.exe
+*.obj
+*.dll
+*.lib
+*.pdb
+*.exp
+*.o
+*.wasm
+
+# Log files
+*.log
+*.tmp
+
+# IDE files
+.DS_Store
+.vscode/
+*.vcxproj.user
+*.sln.docstates
+
+# Dependencies
+node_modules/
+vcpkg/
+*emsdk/
+
+# Output directories
+dist/
+out/
+
+# OS files
+Thumbs.db
+*.ini
