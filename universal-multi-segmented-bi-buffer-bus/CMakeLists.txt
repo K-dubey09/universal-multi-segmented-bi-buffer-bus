@@ -13,5 +13,5 @@ if(MSVC)
 	set_target_properties(universal_multi_segmented_bi_buffer_bus PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-add_executable(test_universal_multi_segmented_bi_buffer_bus test/test_somakernel.c)
+add_executable(test_universal_multi_segmented_bi_buffer_bus test/test_universal_multi_segmented_bi_buffer_bus.c)
 target_link_libraries(test_universal_multi_segmented_bi_buffer_bus universal_multi_segmented_bi_buffer_bus)

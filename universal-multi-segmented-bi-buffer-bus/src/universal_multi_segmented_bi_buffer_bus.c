@@ -1,4 +1,4 @@
-#include "somakernel.h"
+#include "universal_multi_segmented_bi_buffer_bus.h"
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
