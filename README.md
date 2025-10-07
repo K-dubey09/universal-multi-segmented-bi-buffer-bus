@@ -705,11 +705,11 @@ Open `dist/simple_example.html` in your browser to see UMSBB in action.```bash##
 
 
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.```--no-web            Disable web dashboard
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+Copyright (c) 2025 UMSBB Development Team
 
-
-## 🙏 Acknowledgments--port <n>          Web server port (default: 8080)
+## 🙏 Acknowledgments
 
 
 
@@ -1101,6 +1101,8 @@ All tests use realistic workloads and provide detailed performance metrics.```
 ## 📝 License
 
 MIT License - see LICENSE file for details.
+
+Copyright (c) 2025 UMSBB Development Team
 
 ## 🤝 Contributing
 

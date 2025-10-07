@@ -1,3 +1,10 @@
+/*
+ * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - Bi-Buffer Header
+ * 
+ * Copyright (c) 2025 UMSBB Development Team
+ * Licensed under the MIT License - see LICENSE file for details.
+ */
+
 #pragma once
 #include <stddef.h>
 #include <stdint.h>

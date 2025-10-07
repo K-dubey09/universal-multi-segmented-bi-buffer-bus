@@ -323,6 +323,8 @@ connectors/javascript/
 
 MIT License - see the main UMSBB project for details.
 
+Copyright (c) 2025 UMSBB Development Team
+
 ## Contributing
 
 1. Fork the repository

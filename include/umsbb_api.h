@@ -1,6 +1,10 @@
 /*
- * UMSBB C API Header - For external use
- * Provides clean interface to the complete core
+ * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - C API Header
+ * 
+ * Copyright (c) 2025 UMSBB Development Team
+ * Licensed under the MIT License - see LICENSE file for details.
+ * 
+ * Provides clean interface to the complete core functionality
  */
 
 #ifndef UMSBB_API_H

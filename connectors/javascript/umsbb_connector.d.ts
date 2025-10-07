@@ -1,3 +1,10 @@
+/*
+ * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - TypeScript Definitions
+ * 
+ * Copyright (c) 2025 UMSBB Development Team
+ * Licensed under the MIT License - see LICENSE file for details.
+ */
+
 /**
  * UMSBB JavaScript Connector TypeScript Definitions
  * High-performance WebAssembly interface for UMSBB ring buffer system

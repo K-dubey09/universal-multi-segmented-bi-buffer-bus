@@ -1,3 +1,10 @@
+/*
+ * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - Fast Lane Implementation
+ * 
+ * Copyright (c) 2025 UMSBB Development Team
+ * Licensed under the MIT License - see LICENSE file for details.
+ */
+
 #include "fast_lane.h"
 #include <stdlib.h>
 #include <string.h>

@@ -1,4 +1,13 @@
-﻿// UMSBB JavaScript Connector v4.0
+﻿/*
+ * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - JavaScript Connector v4.0
+ * 
+ * Copyright (c) 2025 UMSBB Development Team
+ * Licensed under the MIT License - see LICENSE file for details.
+ * 
+ * High-performance WebAssembly interface for UMSBB ring buffer system
+ */
+
+// UMSBB JavaScript Connector v4.0
 class UMSBBError extends Error {
     constructor(message, code = null) {
         super(message);
