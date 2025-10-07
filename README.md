@@ -1,4 +1,4 @@
-# 🚀 Universal Multi-Segmented Bi-Buffer Bus (UMSBB) v4.0# UMSBB v4.0 - Universal Multi-Segmented Bi-directional Buffer Bus# 🚀 UMSBB v4.0 - Ultimate GPU-Accelerated Multi-GB/s System
+# 🚀 Universal Multi-Segmented Bi-Buffer Bus (UMSBB) v4.0# 🚀 Universal Multi-Segmented Bi-Buffer Bus (UMSBB) v4.0# UMSBB v4.0 - Universal Multi-Segmented Bi-directional Buffer Bus# 🚀 UMSBB v4.0 - Ultimate GPU-Accelerated Multi-GB/s System
 
 
 
@@ -6,214 +6,429 @@
 
 [![WebAssembly](https://img.shields.io/badge/WebAssembly-Ready-brightgreen)](https://webassembly.org/)
 
-[![Performance](https://img.shields.io/badge/Performance-1M%2B%20msg%2Fs-red)](https://github.com/K-dubey09/universal-multi-segmented-bi-buffer-bus)## 🚀 Overview![Version](https://img.shields.io/badge/version-4.0-brightgreen.svg)
+[![Performance](https://img.shields.io/badge/Performance-1M%2B%20msg%2Fs-red)](https://github.com/K-dubey09/universal-multi-segmented-bi-buffer-bus)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 
-**High-performance, lock-free message passing system with WebAssembly support**![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-blue.svg)
+**Ultra-high-performance, lock-free message passing system with WebAssembly support**[![WebAssembly](https://img.shields.io/badge/WebAssembly-Ready-brightgreen)](https://webassembly.org/)
 
 
+
+## ✨ Key Features[![Performance](https://img.shields.io/badge/Performance-1M%2B%20msg%2Fs-red)](https://github.com/K-dubey09/universal-multi-segmented-bi-buffer-bus)## 🚀 Overview![Version](https://img.shields.io/badge/version-4.0-brightgreen.svg)
+
+
+
+- 🔥 **1+ million messages/second** throughput
+
+- 🔒 **Lock-free multi-segment** architecture
+
+- 🌐 **WebAssembly ready** - Deploy anywhere**High-performance, lock-free message passing system with WebAssembly support**![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-blue.svg)
+
+- 🛠️ **Cross-platform** - Windows, Linux, macOS, Web
+
+- 📊 **Real-time monitoring** and statistics
+
+- 🎯 **Production ready** with complete source code
 
 ## ✨ FeaturesThe Universal Multi-Segmented Bi-directional Buffer Bus (UMSBB) is a high-performance, lock-free message passing system designed for maximum throughput and minimal latency. Version 4.0 introduces WebAssembly core architecture with multi-language connectors for universal compatibility.![Performance](https://img.shields.io/badge/throughput-10%2B%20GB/s-red.svg)
 
-
-
-- 🔥 **Ultra-high performance**: 1+ million messages/second throughput![GPU](https://img.shields.io/badge/GPU-CUDA%20%7C%20OpenCL-green.svg)
-
-- 🔒 **Lock-free architecture**: Multi-segment atomic operations
-
-- 🌐 **WebAssembly ready**: Single .wasm file for web deployment## ✨ Key Features![Web](https://img.shields.io/badge/dashboard-realtime-orange.svg)
-
-- 🔧 **Cross-platform**: Windows, Linux, macOS, Web browsers
-
-- 📊 **Real-time monitoring**: Built-in statistics and performance tracking
-
-- 🛠️ **Developer friendly**: Complete source code + ready-to-use binaries
-
-- **Lock-free Architecture**: Atomic operations for maximum concurrency## 🎯 **Ultimate Performance System**
-
 ## 🚀 Quick Start
 
-- **Multi-segment Design**: 8 parallel buffer segments for optimal throughput
 
-### Option 1: Use Pre-built WebAssembly (Recommended)
 
-- **WebAssembly Core**: Universal compatibility across all platforms and languagesThe Universal Multi-Segmented Bi-Buffer Bus v4.0 is the **ultimate high-performance communication system** featuring GPU acceleration, real-time web monitoring, and multi-GB/s throughput capabilities.
+### WebAssembly (Recommended)
 
-```html
+```html- 🔥 **Ultra-high performance**: 1+ million messages/second throughput![GPU](https://img.shields.io/badge/GPU-CUDA%20%7C%20OpenCL-green.svg)
 
-<!DOCTYPE html>- **Language Connectors**: Native bindings for Python, JavaScript, C++, and Rust
+<!DOCTYPE html>
 
-<html>
+<html>- 🔒 **Lock-free architecture**: Multi-segment atomic operations
 
-<head>- **Real-time Monitoring**: Web-based performance dashboard### 🏆 **Performance Targets**
+<head><title>UMSBB Demo</title></head>
 
-    <title>UMSBB Example</title>
-
-</head>- **Adaptive Performance**: GPU detection with CPU fallback- **Throughput**: 10+ GB/s with GPU acceleration
-
-<body>
-
-    <!-- Include the WebAssembly core -->- **Zero-copy Operations**: Direct memory access for minimal overhead- **Message Rate**: 1+ billion messages/second
+<body>- 🌐 **WebAssembly ready**: Single .wasm file for web deployment## ✨ Key Features![Web](https://img.shields.io/badge/dashboard-realtime-orange.svg)
 
     <script src="dist/umsbb_core.js"></script>
 
-    - **Latency**: Sub-microsecond processing
+    <script>- 🔧 **Cross-platform**: Windows, Linux, macOS, Web browsers
 
-    <script>
+        UMSBBCore().then(core => {
 
-        async function initUMSBB() {## 📊 Performance Metrics- **Scaling**: Linear performance with thread count
-
-            // Load the WebAssembly module
-
-            const core = await UMSBBCore();- **Reliability**: Zero-loss operation with fault tolerance
-
-            
-
-            // Initialize the system- **Throughput**: 1+ million messages per second
+            // Initialize system- 📊 **Real-time monitoring**: Built-in statistics and performance tracking
 
             core.ccall('umsbb_init_system', 'number', [], []);
 
-            - **Latency**: Sub-millisecond round-trip times---
+            - 🛠️ **Developer friendly**: Complete source code + ready-to-use binaries
 
-            // Create a buffer (1MB segments x 8)
+            // Create buffer (1MB x 8 segments)
 
-            const bufferId = core.ccall('umsbb_create_buffer', 'number', - **Memory Efficiency**: Configurable 1-64MB buffer sizes
+            const bufferId = core.ccall('umsbb_create_buffer', 'number', - **Lock-free Architecture**: Atomic operations for maximum concurrency## 🎯 **Ultimate Performance System**
 
                 ['number', 'number'], [1024*1024, 8]);
 
-            - **Message Size**: Up to 64KB per message## 🚀 **Quick Start Guide**
+            ## 🚀 Quick Start
 
-            // Send a message
+            // Send message
 
-            const message = "Hello UMSBB!";- **Concurrent Segments**: 8 parallel processing lanes
+            const result = core.ccall('umsbb_write_message', 'number',- **Multi-segment Design**: 8 parallel buffer segments for optimal throughput
 
-            const result = core.ccall('umsbb_write_message', 'number',
+                ['number', 'string', 'number'], [bufferId, "Hello UMSBB!", 13]);
 
-                ['number', 'string', 'number'], [bufferId, message, message.length]);### **Ultimate Performance Test** (Recommended)
+            ### Option 1: Use Pre-built WebAssembly (Recommended)
 
-            
+            console.log('Message sent:', result === 0 ? 'Success' : 'Failed');
 
-            console.log('Message sent:', result === 0 ? 'Success' : 'Failed');## 🏗️ Architecture```cmd
+        });- **WebAssembly Core**: Universal compatibility across all platforms and languagesThe Universal Multi-Segmented Bi-Buffer Bus v4.0 is the **ultimate high-performance communication system** featuring GPU acceleration, real-time web monitoring, and multi-GB/s throughput capabilities.
 
-            
+    </script>
 
-            // Get statistics# Build the complete system
+</body>```html
 
-            const totalMessages = core.ccall('umsbb_get_total_messages', 'number', ['number'], [bufferId]);
+</html>
 
-            console.log('Total messages:', totalMessages);```.\build.bat
+```<!DOCTYPE html>- **Language Connectors**: Native bindings for Python, JavaScript, C++, and Rust
 
-        }
 
-        ┌─────────────────────────────────────────────────────────────┐
 
-        initUMSBB();
-
-    </script>│                    UMSBB v4.0 Architecture                  │# Run ultimate performance test with web dashboard
-
-</body>
-
-</html>├─────────────────────────────────────────────────────────────┤.\build\run_ultimate_test.bat
-
-```
-
-│  Language Connectors                                        │
-
-### Option 2: Build from Source
-
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐            │# Access real-time dashboard
-
-```bash
-
-# Clone the repository│  │ Python  │ │   JS    │ │   C++   │ │  Rust   │            │http://localhost:8080
-
-git clone https://github.com/K-dubey09/universal-multi-segmented-bi-buffer-bus.git
-
-cd universal-multi-segmented-bi-buffer-bus│  └─────────┘ └─────────┘ └─────────┘ └─────────┘            │```
-
-
-
-# Build WebAssembly (requires Emscripten)├─────────────────────────────────────────────────────────────┤
-
-./build_wasm_simple.sh  # Linux/macOS
-
-# or│  WebAssembly Core (umsbb_core.wasm)                        │### **Custom Performance Testing**
-
-build_wasm_simple.bat   # Windows
-
-│  ┌─────────────────────────────────────────────────────────┐ │```cmd
-
-# Build native library
-
-mkdir build && cd build│  │  Multi-Segment Buffer Manager                           │ │# High-load stress test
-
-cmake ..
-
-make│  │  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ... ┌─────┐ ┌─────┐   │ │.\build\umsbb_gpu_v4_ultimate_test.exe --producers 16 --consumers 8 --duration 300
-
-```
-
-│  │  │ S0  │ │ S1  │ │ S2  │ │ S3  │     │ S6  │ │ S7  │   │ │
-
-## 📦 What's Included
-
-│  │  └─────┘ └─────┘ └─────┘ └─────┘     └─────┘ └─────┘   │ │# CPU vs GPU comparison
-
-### Ready-to-Use Files (`/dist/`)
-
-- **`umsbb_core.js`** - WebAssembly loader and wrapper│  └─────────────────────────────────────────────────────────┘ │.\build\umsbb_gpu_v4_ultimate_test.exe --no-gpu --duration 60
-
-- **`umsbb_core.wasm`** - Optimized WebAssembly binary
-
-- **`simple_example.html`** - Basic integration example├─────────────────────────────────────────────────────────────┤
-
-- **`web_demo.html`** - Full-featured interactive demo
-
-- **Build scripts** for custom compilation│  Atomic Operations & Memory Management                      │# Custom configuration
-
-
-
-### Complete Source Code└─────────────────────────────────────────────────────────────┘.\build\umsbb_gpu_v4_ultimate_test.exe --message-size 1024 --port 9090 --producers 32
-
-- **`/src/`** - Complete C implementation with all modules
-
-- **`/include/`** - Header files and API definitions``````
-
-- **`/test/`** - Comprehensive test suite
-
-- **`/connectors/`** - Language bindings (Python, JavaScript, C++, Rust)
-
-- **`/examples/`** - Usage examples and integration patterns
-
-## 📁 Project Structure---
-
-### Documentation (`/docs/`)
-
-- **API Reference** - Complete function documentation
-
-- **Customization Guide** - How to modify and rebuild
-
-- **Performance Guide** - Optimization tips and benchmarks```## 🏗️ **System Architecture**
-
-
-
-## 🔧 API Referenceuniversal-multi-segmented-bi-buffer-bus/
-
-
-
-### Core Functions├── core/                           # WebAssembly core implementation### **GPU Acceleration Framework**
+### Native C/C++<html>
 
 ```c
 
-// System management│   ├── umsbb_core.c               # Main core implementation- **CUDA Support**: NVIDIA GPU acceleration with stream processing
+#include "include/umsbb_api.h"<head>- **Real-time Monitoring**: Web-based performance dashboard### 🏆 **Performance Targets**
+
+
+
+int main() {    <title>UMSBB Example</title>
+
+    // Initialize
+
+    umsbb_init_system();</head>- **Adaptive Performance**: GPU detection with CPU fallback- **Throughput**: 10+ GB/s with GPU acceleration
+
+    
+
+    // Create buffer<body>
+
+    int buffer_id = umsbb_create_buffer(1024 * 1024, 8);
+
+        <!-- Include the WebAssembly core -->- **Zero-copy Operations**: Direct memory access for minimal overhead- **Message Rate**: 1+ billion messages/second
+
+    // Send message
+
+    const char* msg = "Hello UMSBB!";    <script src="dist/umsbb_core.js"></script>
+
+    umsbb_write_message(buffer_id, msg, strlen(msg));
+
+        - **Latency**: Sub-microsecond processing
+
+    // Read message
+
+    char output[256];    <script>
+
+    int bytes_read = umsbb_read_message(buffer_id, output, sizeof(output));
+
+    printf("Received: %.*s\n", bytes_read, output);        async function initUMSBB() {## 📊 Performance Metrics- **Scaling**: Linear performance with thread count
+
+    
+
+    // Cleanup            // Load the WebAssembly module
+
+    umsbb_destroy_buffer(buffer_id);
+
+    umsbb_shutdown_system();            const core = await UMSBBCore();- **Reliability**: Zero-loss operation with fault tolerance
+
+    return 0;
+
+}            
+
+```
+
+            // Initialize the system- **Throughput**: 1+ million messages per second
+
+## 📦 Repository Structure
+
+            core.ccall('umsbb_init_system', 'number', [], []);
+
+```
+
+📁 dist/                    # 🎯 Ready-to-use files            - **Latency**: Sub-millisecond round-trip times---
+
+├── umsbb_core.js          #   WebAssembly loader
+
+├── umsbb_core.wasm        #   Compiled binary            // Create a buffer (1MB segments x 8)
+
+└── simple_example.html    #   Working demo
+
+            const bufferId = core.ccall('umsbb_create_buffer', 'number', - **Memory Efficiency**: Configurable 1-64MB buffer sizes
+
+📁 src/                     # 💻 Source code
+
+├── umsbb_complete_core.c  #   Unified implementation                ['number', 'number'], [1024*1024, 8]);
+
+├── umsbb_wasm_core.c      #   WebAssembly optimized
+
+└── [implementation files] #   Complete C codebase            - **Message Size**: Up to 64KB per message## 🚀 **Quick Start Guide**
+
+
+
+📁 include/                 # 📋 Headers            // Send a message
+
+├── umsbb_api.h            #   Main API
+
+└── [header files]         #   All includes            const message = "Hello UMSBB!";- **Concurrent Segments**: 8 parallel processing lanes
+
+
+
+📁 connectors/              # 🌐 Language bindings            const result = core.ccall('umsbb_write_message', 'number',
+
+├── python/                #   Python integration
+
+├── javascript/            #   JavaScript/Node.js                ['number', 'string', 'number'], [bufferId, message, message.length]);### **Ultimate Performance Test** (Recommended)
+
+├── cpp/                   #   C++ wrapper
+
+└── rust/                  #   Rust FFI            
+
+
+
+📁 test/                    # 🧪 Test suite            console.log('Message sent:', result === 0 ? 'Success' : 'Failed');## 🏗️ Architecture```cmd
+
+├── benchmark_performance.c #  Performance tests
+
+└── [test files]           #   Complete validation            
+
+
+
+📁 examples/                # 📚 Usage examples            // Get statistics# Build the complete system
+
+└── [example files]        #   Integration patterns
+
+```            const totalMessages = core.ccall('umsbb_get_total_messages', 'number', ['number'], [bufferId]);
+
+
+
+## 🔧 Building            console.log('Total messages:', totalMessages);```.\build.bat
+
+
+
+### WebAssembly (Simple)        }
+
+```bash
+
+# Requires Emscripten SDK        ┌─────────────────────────────────────────────────────────────┐
+
+./build_wasm_simple.sh     # Linux/macOS
+
+build_wasm_simple.bat      # Windows        initUMSBB();
+
+```
+
+    </script>│                    UMSBB v4.0 Architecture                  │# Run ultimate performance test with web dashboard
+
+### Native Library
+
+```bash</body>
+
+mkdir build && cd build
+
+cmake ..</html>├─────────────────────────────────────────────────────────────┤.\build\run_ultimate_test.bat
+
+make -j$(nproc)
+
+``````
+
+
+
+### Advanced Build│  Language Connectors                                        │
+
+```bash
+
+# Python builder with options### Option 2: Build from Source
+
+python build_core.py build --target wasm --optimization 3
+
+python build_core.py build --target native-linux│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐            │# Access real-time dashboard
+
+```
+
+```bash
+
+## 📊 Performance
+
+# Clone the repository│  │ Python  │ │   JS    │ │   C++   │ │  Rust   │            │http://localhost:8080
+
+- **Throughput**: 1+ million messages/second
+
+- **Latency**: Sub-microsecond processinggit clone https://github.com/K-dubey09/universal-multi-segmented-bi-buffer-bus.git
+
+- **Memory**: Efficient circular buffers
+
+- **Scalability**: Linear with CPU corescd universal-multi-segmented-bi-buffer-bus│  └─────────┘ └─────────┘ └─────────┘ └─────────┘            │```
+
+- **WebAssembly**: ~50KB optimized binary
+
+
+
+## 🎯 Use Cases
+
+# Build WebAssembly (requires Emscripten)├─────────────────────────────────────────────────────────────┤
+
+- **Real-time Gaming**: Player synchronization
+
+- **Financial Trading**: High-frequency data./build_wasm_simple.sh  # Linux/macOS
+
+- **IoT Systems**: Sensor data streaming
+
+- **Web Applications**: Worker thread communication# or│  WebAssembly Core (umsbb_core.wasm)                        │### **Custom Performance Testing**
+
+- **Enterprise**: ETL pipelines, analytics
+
+build_wasm_simple.bat   # Windows
+
+## 🌐 Language Support
+
+│  ┌─────────────────────────────────────────────────────────┐ │```cmd
+
+- **C/C++**: Native API
+
+- **Python**: High-level connector# Build native library
+
+- **JavaScript**: WebAssembly + Node.js
+
+- **Rust**: Safe FFI wrappermkdir build && cd build│  │  Multi-Segment Buffer Manager                           │ │# High-load stress test
+
+- **Go**: Native bindings
+
+- **C#**: .NET integrationcmake ..
+
+
+
+## 📖 API Referencemake│  │  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ... ┌─────┐ ┌─────┐   │ │.\build\umsbb_gpu_v4_ultimate_test.exe --producers 16 --consumers 8 --duration 300
+
+
+
+### Core Functions```
+
+```c
+
+// System│  │  │ S0  │ │ S1  │ │ S2  │ │ S3  │     │ S6  │ │ S7  │   │ │
 
 int umsbb_init_system();
 
-int umsbb_shutdown_system();│   └── umsbb_core.h               # Public API header- **OpenCL Support**: Cross-vendor GPU acceleration (NVIDIA/AMD/Intel)
+int umsbb_shutdown_system();## 📦 What's Included
 
 
 
+// Buffers│  │  └─────┘ └─────┘ └─────┘ └─────┘     └─────┘ └─────┘   │ │# CPU vs GPU comparison
+
+int umsbb_create_buffer(uint32_t segment_size, uint32_t num_segments);
+
+int umsbb_destroy_buffer(int buffer_id);### Ready-to-Use Files (`/dist/`)
+
+
+
+// Messages- **`umsbb_core.js`** - WebAssembly loader and wrapper│  └─────────────────────────────────────────────────────────┘ │.\build\umsbb_gpu_v4_ultimate_test.exe --no-gpu --duration 60
+
+int umsbb_write_message(int buffer_id, const void* data, uint32_t size);
+
+int umsbb_read_message(int buffer_id, void* buffer, uint32_t max_size);- **`umsbb_core.wasm`** - Optimized WebAssembly binary
+
+
+
+// Statistics- **`simple_example.html`** - Basic integration example├─────────────────────────────────────────────────────────────┤
+
+uint64_t umsbb_get_total_messages(int buffer_id);
+
+uint64_t umsbb_get_total_bytes(int buffer_id);- **`web_demo.html`** - Full-featured interactive demo
+
+uint32_t umsbb_get_pending_messages(int buffer_id);
+
+```- **Build scripts** for custom compilation│  Atomic Operations & Memory Management                      │# Custom configuration
+
+
+
+### JavaScript/WebAssembly
+
+```javascript
+
+// Load module### Complete Source Code└─────────────────────────────────────────────────────────────┘.\build\umsbb_gpu_v4_ultimate_test.exe --message-size 1024 --port 9090 --producers 32
+
+const core = await UMSBBCore();
+
+- **`/src/`** - Complete C implementation with all modules
+
+// Use functions
+
+core.ccall('umsbb_init_system', 'number', [], []);- **`/include/`** - Header files and API definitions``````
+
+const bufferId = core.ccall('umsbb_create_buffer', 'number', 
+
+    ['number', 'number'], [1024*1024, 8]);- **`/test/`** - Comprehensive test suite
+
+```
+
+- **`/connectors/`** - Language bindings (Python, JavaScript, C++, Rust)
+
+## 🔍 Examples
+
+- **`/examples/`** - Usage examples and integration patterns
+
+- **Live Demo**: Open `dist/simple_example.html`
+
+- **Performance Test**: Run `test/benchmark_performance`## 📁 Project Structure---
+
+- **Multi-language**: Check `examples/` directory
+
+- **Integration**: See `connectors/` for language bindings### Documentation (`/docs/`)
+
+
+
+## 🤝 Contributing- **API Reference** - Complete function documentation
+
+
+
+1. Fork the repository- **Customization Guide** - How to modify and rebuild
+
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+
+3. Commit changes (`git commit -m 'Add amazing feature'`)- **Performance Guide** - Optimization tips and benchmarks```## 🏗️ **System Architecture**
+
+4. Push branch (`git push origin feature/amazing-feature`)
+
+5. Open Pull Request
+
+
+
+## 📄 License## 🔧 API Referenceuniversal-multi-segmented-bi-buffer-bus/
+
+
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+
+
+## 🙏 Acknowledgments### Core Functions├── core/                           # WebAssembly core implementation### **GPU Acceleration Framework**
+
+
+
+- WebAssembly community for excellent toolchain```c
+
+- Lock-free programming research community
+
+- High-performance computing enthusiasts// System management│   ├── umsbb_core.c               # Main core implementation- **CUDA Support**: NVIDIA GPU acceleration with stream processing
+
+
+
+---int umsbb_init_system();
+
+
+
+**Ready for high-performance messaging?** 🚀int umsbb_shutdown_system();│   └── umsbb_core.h               # Public API header- **OpenCL Support**: Cross-vendor GPU acceleration (NVIDIA/AMD/Intel)
+
+- **Quick Start**: Use files in `dist/` directory
+
+- **Development**: Full source code in `src/` and `include/`
+
+- **Integration**: Language bindings in `connectors/`
 // Buffer operations├── connectors/                     # Language-specific connectors- **Memory Management**: Pinned memory pools for zero-copy operations
 
 int umsbb_create_buffer(uint32_t segment_size, uint32_t num_segments);
@@ -418,7 +633,7 @@ Edit `src/umsbb_wasm_core.c` to modify:
 
 ```
 
-Platform: Intel i7-10700K @ 3.8GHz### 3. Test Language Connectors### **3. CPU Parallel Test** ⚡
+Platform: Intel i7-10700K @ 3.2GHz### 3. Test Language Connectors### **3. CPU Parallel Test** ⚡
 
 Memory: 32GB DDR4-3200
 
