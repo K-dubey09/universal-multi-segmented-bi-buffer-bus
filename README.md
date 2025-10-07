@@ -629,13 +629,16 @@ Edit `src/umsbb_wasm_core.c` to modify:
 
 ## 📈 Benchmarks
 
-
+**Development System Specifications:**
+- **CPU**: AMD Ryzen 7 7840HS (3.8GHz base, 5.1GHz boost)
+- **Memory**: 16GB DDR5-5600
+- **GPU**: NVIDIA RTX 4050 (6GB VRAM)
 
 ```
 
-Platform: Intel i7-10700K @ 3.2GHz### 3. Test Language Connectors### **3. CPU Parallel Test** ⚡
-
-Memory: 32GB DDR4-3200
+Platform: AMD Ryzen 7 7840HS @ 3.8-5.1GHz
+Memory: 16GB DDR5-5600
+GPU: NVIDIA RTX 4050 6GB
 
 **File**: `simplified_parallel_test.c`
 
@@ -892,6 +895,19 @@ int main() {# Build with GPU detection
 use umsbb_connector::*;- **OpenCL SDK**: 1.2+ (for cross-vendor)
 
 - 8GB+ system RAM
+
+### **Development & Benchmark System**
+
+**Test Configuration Used:**
+- **CPU**: AMD Ryzen 7 7840HS (8C/16T, 3.8-5.1 GHz)
+- **RAM**: 16GB DDR5-5600 MHz  
+- **GPU**: NVIDIA RTX 4050 (6GB VRAM)
+- **Platform**: Windows 11
+
+*All performance benchmarks and test results in this documentation were obtained on the above system.*
+- **Platform**: Windows 11
+
+*Performance benchmarks and development testing performed on this configuration*
 
 fn main() -> UMSBBResult<()> {
 
