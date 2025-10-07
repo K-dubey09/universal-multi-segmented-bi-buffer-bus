@@ -1,9 +1,19 @@
 # Build artifacts
 *build/
+build*/
+*/build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.exe
 *.dll
 *.lib
 *.pdb
 *.exp
+*.obj
+*.o
+*.a
+*.so
 
 # Log files
 *.log
@@ -14,15 +24,24 @@
 .vscode/
 *.vcxproj.user
 *.sln.docstates
+imgui.ini
 
 # Dependencies
 node_modules/
 vcpkg/
 *emsdk/
+*/emsdk/
+downloads/
+packages/
+buildtrees/
+installed/
 
 # Output directories
 dist/
 out/
+Release/
+Debug/
+x64/
 
 # OS files
 Thumbs.db
