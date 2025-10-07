@@ -1,0 +1,22 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# Threading support required
+find_dependency(Threads REQUIRED)
+
+# GPU dependencies (optional)
+if(@ENABLE_GPU_SUPPORT@)
+    if(@ENABLE_CUDA@ AND @CUDA_FOUND@)
+        find_dependency(CUDA QUIET)
+    endif()
+    
+    if(@ENABLE_OPENCL@ AND @OpenCL_FOUND@)
+        find_dependency(OpenCL QUIET)
+    endif()
+endif()
+
+# Include the exported targets
+include("${CMAKE_CURRENT_LIST_DIR}/UniversalMultiSegmentedBiBufferBusTargets.cmake")
+
+check_required_components(UniversalMultiSegmentedBiBufferBus)

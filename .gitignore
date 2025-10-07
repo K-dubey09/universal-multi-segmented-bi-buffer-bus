@@ -1,6 +1,7 @@
+# UMSBB v4.0 Project .gitignore
+
 # Build artifacts
-*build/
-build*/
+build/
 */build/
 CMakeFiles/
 CMakeCache.txt
@@ -15,18 +16,23 @@ cmake_install.cmake
 *.a
 *.so
 
-# Log files
+# Test outputs and logs
 *.log
 *.tmp
+test_results/
+performance_data/
 
-# IDE files
+# IDE and editor files
 .DS_Store
 .vscode/
 *.vcxproj.user
 *.sln.docstates
+*.swp
+*.swo
+*~
 imgui.ini
 
-# Dependencies
+# Dependencies and external libraries
 node_modules/
 vcpkg/
 *emsdk/
@@ -42,7 +48,32 @@ out/
 Release/
 Debug/
 x64/
+x86/
+bin/
 
-# OS files
+# OS specific files
 Thumbs.db
 *.ini
+.DS_Store
+
+# GPU acceleration cache
+*.cubin
+*.ptx
+*.gpu
+
+# Web dashboard cache
+*.wasm.map
+
+# Backup and temporary files
+*.bak
+*.backup
+*.old
+*_old.*
+*_backup.*
+
+# Performance test exports
+performance_*.json
+benchmark_*.txt
+
+# Documentation build artifacts
+docs/build/
