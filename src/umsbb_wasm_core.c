@@ -17,12 +17,13 @@
 #define WASM_EXPORT
 #endif
 
-// Configuration constants
+// Configuration constants - Optimized for WebAssembly
 #define UMSBB_MAX_BUFFERS 16
 #define UMSBB_NUM_SEGMENTS 8
 #define UMSBB_DEFAULT_SEGMENT_SIZE (1024 * 1024)  // 1MB
 #define UMSBB_MAX_MESSAGE_SIZE (1024 * 1024)      // 1MB
 #define UMSBB_HEADER_SIZE 16
+#define UMSBB_ALIGNMENT 8                         // 8-byte alignment for better performance
 
 // Error codes
 typedef enum {
@@ -97,17 +98,22 @@ static uint64_t get_timestamp_ms() {
 }
 
 static void* wasm_malloc(size_t size) {
-    // Simple allocation for WebAssembly
+    // Optimized allocation for WebAssembly with better alignment
     static uint8_t heap[8 * 1024 * 1024]; // 8MB heap
     static size_t heap_pos = 0;
     
-    size = (size + 7) & ~7; // 8-byte alignment
+    // Ensure alignment for better performance
+    size = (size + UMSBB_ALIGNMENT - 1) & ~(UMSBB_ALIGNMENT - 1);
+    
     if (heap_pos + size > sizeof(heap)) {
-        return NULL;
+        return NULL; // Out of memory
     }
     
     void* ptr = &heap[heap_pos];
     heap_pos += size;
+    
+    // Zero-initialize for consistency
+    memset(ptr, 0, size);
     return ptr;
 }
 

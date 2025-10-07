@@ -19,11 +19,12 @@ extern "C" {
 #define UMSBB_VERSION_MINOR 0
 #define UMSBB_VERSION_PATCH 0
 
-// Configuration constants
+// Configuration constants - Performance optimized
 #define UMSBB_MAX_BUFFER_SIZE (64 * 1024 * 1024)  // 64MB
 #define UMSBB_MIN_BUFFER_SIZE (1 * 1024 * 1024)   // 1MB
-#define UMSBB_MAX_MESSAGE_SIZE (64 * 1024)        // 64KB
+#define UMSBB_MAX_MESSAGE_SIZE (1 * 1024 * 1024)  // 1MB (increased for better throughput)
 #define UMSBB_SEGMENT_COUNT 8
+#define UMSBB_CACHE_LINE_SIZE 64                   // CPU cache line optimization
 
 // Error codes
 typedef enum {

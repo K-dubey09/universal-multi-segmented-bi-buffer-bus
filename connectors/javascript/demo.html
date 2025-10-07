@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMSBB JavaScript Connector - Browser Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        .output {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .stat-item {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 UMSBB JavaScript Connector</h1>
+        <p>High-Performance Ring Buffer for Web Applications</p>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <h3>📦 Buffer Control</h3>
+            <label>Buffer Size (MB):</label>
+            <input type="number" id="bufferSize" value="32" min="1" max="64">
+            
+            <label>Number of Segments:</label>
+            <input type="number" id="numSegments" value="8" min="1" max="16">
+            
+            <button onclick="initializeBuffer()">Initialize Buffer</button>
+            <button onclick="closeBuffer()">Close Buffer</button>
+            
+            <div id="bufferStatus" class="status info">
+                Buffer not initialized
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>📊 Buffer Statistics</h3>
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalMessages">0</div>
+                    <div>Total Messages</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="pendingMessages">0</div>
+                    <div>Pending</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="mode">N/A</div>
+                    <div>Mode</div>
+                </div>
+            </div>
+            <button onclick="updateStats()">Refresh Stats</button>
+        </div>
+
+        <div class="panel">
+            <h3>📝 Write Messages</h3>
+            <textarea id="messageInput" placeholder="Enter your message here..." rows="3"></textarea>
+            <button onclick="writeMessage()">Write Message</button>
+            <button onclick="writeMultiple()">Write 10 Test Messages</button>
+        </div>
+
+        <div class="panel">
+            <h3>📖 Read Messages</h3>
+            <button onclick="readMessage()">Read Single Message</button>
+            <button onclick="readAll()">Read All Messages</button>
+            <button onclick="clearOutput()">Clear Output</button>
+            
+            <div class="output" id="readOutput">Messages will appear here...</div>
+        </div>
+
+        <div class="panel full-width">
+            <h3>⚡ Performance Testing</h3>
+            <label>Message Count:</label>
+            <input type="number" id="perfMessageCount" value="1000" min="10" max="100000">
+            
+            <button onclick="runPerformanceTest()">Run Performance Test</button>
+            <button onclick="runConcurrencyTest()">Run Concurrency Test</button>
+            
+            <div class="output" id="perfOutput">Performance results will appear here...</div>
+        </div>
+    </div>
+
+    <script src="umsbb_connector.js"></script>
+    <script>
+        let buffer = null;
+
+        function log(message, outputId = 'readOutput') {
+            const output = document.getElementById(outputId);
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent += `[${timestamp}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function setStatus(message, type = 'info') {
+            const status = document.getElementById('bufferStatus');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        async function initializeBuffer() {
+            try {
+                const sizeMB = parseInt(document.getElementById('bufferSize').value);
+                const numSegments = parseInt(document.getElementById('numSegments').value);
+                
+                if (buffer) {
+                    await buffer.close();
+                }
+                
+                buffer = await createBuffer(sizeMB, numSegments);
+                setStatus(`Buffer initialized (${sizeMB}MB, ${numSegments} segments)`, 'success');
+                updateStats();
+                log('Buffer initialized successfully');
+            } catch (error) {
+                setStatus(`Error: ${error.message}`, 'error');
+                log(`Error initializing buffer: ${error.message}`);
+            }
+        }
+
+        async function closeBuffer() {
+            if (buffer) {
+                await buffer.close();
+                buffer = null;
+                setStatus('Buffer closed', 'info');
+                updateStats();
+                log('Buffer closed');
+            }
+        }
+
+        async function updateStats() {
+            if (!buffer) {
+                document.getElementById('totalMessages').textContent = '0';
+                document.getElementById('pendingMessages').textContent = '0';
+                document.getElementById('mode').textContent = 'N/A';
+                return;
+            }
+
+            try {
+                const stats = await buffer.getStats();
+                document.getElementById('totalMessages').textContent = stats.totalMessages;
+                document.getElementById('pendingMessages').textContent = stats.pendingMessages;
+                document.getElementById('mode').textContent = stats.useMockMode ? 'Mock' : 'WASM';
+            } catch (error) {
+                log(`Error getting stats: ${error.message}`);
+            }
+        }
+
+        async function writeMessage() {
+            if (!buffer) {
+                setStatus('Please initialize buffer first', 'error');
+                return;
+            }
+
+            try {
+                const message = document.getElementById('messageInput').value;
+                if (!message.trim()) {
+                    log('Please enter a message to write');
+                    return;
+                }
+
+                await buffer.write(message);
+                log(`Written: "${message}"`);
+                document.getElementById('messageInput').value = '';
+                updateStats();
+            } catch (error) {
+                log(`Error writing message: ${error.message}`);
+            }
+        }
+
+        async function writeMultiple() {
+            if (!buffer) {
+                setStatus('Please initialize buffer first', 'error');
+                return;
+            }
+
+            try {
+                for (let i = 1; i <= 10; i++) {
+                    await buffer.write(`Test message ${i}`);
+                }
+                log('Written 10 test messages');
+                updateStats();
+            } catch (error) {
+                log(`Error writing multiple messages: ${error.message}`);
+            }
+        }
+
+        async function readMessage() {
+            if (!buffer) {
+                setStatus('Please initialize buffer first', 'error');
+                return;
+            }
+
+            try {
+                const message = await buffer.read();
+                if (message === null) {
+                    log('No messages available');
+                } else {
+                    log(`Read: "${message}"`);
+                }
+                updateStats();
+            } catch (error) {
+                log(`Error reading message: ${error.message}`);
+            }
+        }
+
+        async function readAll() {
+            if (!buffer) {
+                setStatus('Please initialize buffer first', 'error');
+                return;
+            }
+
+            try {
+                let count = 0;
+                while (true) {
+                    const message = await buffer.read();
+                    if (message === null) break;
+                    log(`Read #${++count}: "${message}"`);
+                }
+                log(`Finished reading ${count} messages`);
+                updateStats();
+            } catch (error) {
+                log(`Error reading messages: ${error.message}`);
+            }
+        }
+
+        function clearOutput() {
+            document.getElementById('readOutput').textContent = '';
+        }
+
+        async function runPerformanceTest() {
+            if (!buffer) {
+                setStatus('Please initialize buffer first', 'error');
+                return;
+            }
+
+            const messageCount = parseInt(document.getElementById('perfMessageCount').value);
+            log(`Starting performance test with ${messageCount} messages...`, 'perfOutput');
+
+            try {
+                const start = Date.now();
+
+                // Write phase
+                for (let i = 0; i < messageCount; i++) {
+                    await buffer.write(`Perf test message ${i}`);
+                    if (i % 1000 === 0 && i > 0) {
+                        log(`Written ${i} messages...`, 'perfOutput');
+                    }
+                }
+
+                const writeTime = Date.now() - start;
+                log(`Write phase completed in ${writeTime}ms`, 'perfOutput');
+
+                // Read phase
+                const readStart = Date.now();
+                let readCount = 0;
+                while (readCount < messageCount) {
+                    const msg = await buffer.read();
+                    if (msg) {
+                        readCount++;
+                        if (readCount % 1000 === 0) {
+                            log(`Read ${readCount} messages...`, 'perfOutput');
+                        }
+                    }
+                }
+
+                const readTime = Date.now() - readStart;
+                const totalTime = Date.now() - start;
+
+                log(`Read phase completed in ${readTime}ms`, 'perfOutput');
+                log(`Total time: ${totalTime}ms`, 'perfOutput');
+                log(`Throughput: ${Math.round(messageCount / (totalTime / 1000))} msg/s`, 'perfOutput');
+
+                updateStats();
+            } catch (error) {
+                log(`Performance test error: ${error.message}`, 'perfOutput');
+            }
+        }
+
+        async function runConcurrencyTest() {
+            if (!buffer) {
+                setStatus('Please initialize buffer first', 'error');
+                return;
+            }
+
+            const messageCount = parseInt(document.getElementById('perfMessageCount').value);
+            log(`Starting concurrency test with ${messageCount} messages...`, 'perfOutput');
+
+            try {
+                const start = Date.now();
+
+                // Producer
+                const producer = async () => {
+                    for (let i = 0; i < messageCount; i++) {
+                        await buffer.write(`Concurrent message ${i}`);
+                    }
+                    log('Producer finished', 'perfOutput');
+                };
+
+                // Consumer
+                const consumer = async () => {
+                    let consumed = 0;
+                    while (consumed < messageCount) {
+                        const msg = await buffer.read();
+                        if (msg) {
+                            consumed++;
+                        } else {
+                            await new Promise(resolve => setTimeout(resolve, 1));
+                        }
+                    }
+                    log('Consumer finished', 'perfOutput');
+                };
+
+                // Run concurrently
+                await Promise.all([producer(), consumer()]);
+
+                const duration = (Date.now() - start) / 1000;
+                log(`Concurrency test completed in ${duration.toFixed(3)}s`, 'perfOutput');
+                log(`Throughput: ${Math.round(messageCount / duration)} msg/s`, 'perfOutput');
+
+                updateStats();
+            } catch (error) {
+                log(`Concurrency test error: ${error.message}`, 'perfOutput');
+            }
+        }
+
+        // Auto-refresh stats every 2 seconds
+        setInterval(() => {
+            if (buffer) updateStats();
+        }, 2000);
+
+        // Initialize with default settings on page load
+        window.addEventListener('load', () => {
+            log('UMSBB JavaScript Connector Demo loaded');
+            log('Click "Initialize Buffer" to get started');
+        });
+    </script>
+</body>
+</html>

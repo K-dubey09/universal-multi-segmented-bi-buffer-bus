@@ -85,8 +85,8 @@ class UMSBBCoreBuilder:
         return config_path
     
     def get_compiler_flags(self):
-        """Get compiler flags based on configuration"""
-        base_flags = [f"-O{self.optimization_level}", "-std=c11"]
+        """Get optimized compiler flags based on configuration"""
+        base_flags = [f"-O{self.optimization_level}", "-std=c11", "-ffast-math"]
         
         if self.target_platform == 'wasm':
             emcc_flags = [
@@ -118,21 +118,35 @@ class UMSBBCoreBuilder:
                 emcc_flags[3] += "]"
             
             emcc_flags.extend([
-                "-s", "EXPORTED_RUNTIME_METHODS=[\"ccall\", \"cwrap\"]",
+                "-s", "EXPORTED_RUNTIME_METHODS=[\"ccall\", \"cwrap\", \"UTF8ToString\"]",
                 "-s", "ALLOW_MEMORY_GROWTH=1",
                 "-s", "MAXIMUM_MEMORY=134217728",  # 128MB
                 "-s", "MODULARIZE=1",
                 "-s", "EXPORT_NAME=UMSBBCore",
-                "-s", "ENVIRONMENT=web,node"
+                "-s", "ENVIRONMENT=web,node",
+                "-s", "MALLOC=emmalloc",          # Optimized allocator
+                "-s", "ASSERTIONS=0",             # Disable assertions in production
+                "-s", "STACK_OVERFLOW_CHECK=0",   # Disable stack checks for performance
+                "--closure", "1"                  # Enable Closure Compiler optimization
             ])
+            
+            # Add optimization flags based on level
+            if self.optimization_level >= 2:
+                emcc_flags.extend(["-s", "AGGRESSIVE_VARIABLE_ELIMINATION=1"])
+            
+            if self.optimization_level >= 3:
+                emcc_flags.extend(["--llvm-lto", "3"])  # Link-time optimization
             
             return base_flags + emcc_flags
         else:
-            # Native compilation flags
-            native_flags = ["-shared", "-fPIC", "-Wall", "-Wextra"]
+            # Native compilation flags - optimized
+            native_flags = ["-shared", "-fPIC", "-Wall", "-Wextra", "-march=native"]
+            
+            if self.optimization_level >= 2:
+                native_flags.extend(["-flto", "-funroll-loops"])  # Link-time optimization
             
             if 'linux' in self.target_platform:
-                native_flags.extend(["-lpthread", "-lm"])
+                native_flags.extend(["-lpthread", "-lm", "-lrt"])
             elif 'windows' in self.target_platform:
                 native_flags.extend(["-lwinmm", "-lws2_32"])
             

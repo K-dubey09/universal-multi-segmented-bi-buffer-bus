@@ -1,0 +1,35 @@
+{
+  "name": "umsbb-javascript-connector",
+  "version": "4.0.0",
+  "description": "JavaScript/TypeScript connector for Universal Multi-Segmented Bi-Buffer Bus (UMSBB)",
+  "main": "umsbb_connector.js",
+  "scripts": {
+    "test": "node -e \"const { performanceTest } = require('./umsbb_connector.js'); performanceTest(1000).catch(console.error);\"",
+    "demo": "node demo.js"
+  },
+  "keywords": [
+    "umsbb",
+    "ring-buffer",
+    "message-queue",
+    "webassembly",
+    "javascript",
+    "typescript",
+    "high-performance"
+  ],
+  "author": "UMSBB Development Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/umsbb"
+  },
+  "files": [
+    "umsbb_connector.js",
+    "umsbb_connector.d.ts",
+    "demo.js",
+    "demo.html",
+    "README.md"
+  ]
+}

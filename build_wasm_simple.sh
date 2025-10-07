@@ -26,16 +26,22 @@ echo
 mkdir -p build
 
 # Compile the WebAssembly core
+echo "🔧 Compiling WebAssembly core with optimizations..."
+
 emcc -O3 -s WASM=1 \
     -s "EXPORTED_FUNCTIONS=['_umsbb_init_system','_umsbb_shutdown_system','_umsbb_create_buffer','_umsbb_write_message','_umsbb_read_message','_umsbb_destroy_buffer','_umsbb_get_total_messages','_umsbb_get_total_bytes','_umsbb_get_pending_messages','_umsbb_get_version','_umsbb_get_error_string','_umsbb_run_performance_test','_umsbb_malloc','_umsbb_free']" \
-    -s "EXPORTED_RUNTIME_METHODS=['ccall', 'cwrap']" \
+    -s "EXPORTED_RUNTIME_METHODS=['ccall', 'cwrap', 'UTF8ToString']" \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s INITIAL_MEMORY=33554432 \
     -s MAXIMUM_MEMORY=134217728 \
     -s MODULARIZE=1 \
     -s EXPORT_NAME=UMSBBCore \
     -s ENVIRONMENT=web,node \
-    umsbb_wasm_core.c -o umsbb_core.js
+    -s MALLOC=emmalloc \
+    -s ASSERTIONS=0 \
+    -s STACK_OVERFLOW_CHECK=0 \
+    --closure 1 \
+    src/umsbb_wasm_core.c -o dist/umsbb_core.js
 
 if [ $? -eq 0 ]; then
     echo
