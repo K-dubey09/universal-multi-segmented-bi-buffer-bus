@@ -6,9 +6,9 @@ let feedbackLock = false;
 
 import { renderRing } from "./ring.js";
 
-SomakernelModule().then(mod => {
+UniversalMultiSegmentedBiBufferBusModule().then(mod => {
   Module = mod;
-  busPtr = Module._somakernel_init(1024, 2048);
+  busPtr = Module._umsbb_init(1024, 2048);
   setInterval(pollRingState, 1000);
   setInterval(pollFeedback, 1000);
 });
@@ -59,7 +59,7 @@ window.sendCapsule = function sendCapsule(id) {
     encoded = new Uint8Array([0xDE, 0xAD, 0xBE, 0xEF]);
     ptr = Module._malloc(encoded.length);
     Module.HEAPU8.set(encoded, ptr);
-    Module._somakernel_submit_to(busPtr, lane, ptr, encoded.length);
+    Module._umsbb_submit_to(busPtr, lane, ptr, encoded.length);
     Module._free(ptr);
     logFeedback(`❌ Producer ${id} → Lane ${lane}: Corrupted capsule`);
   } else {
@@ -67,14 +67,14 @@ window.sendCapsule = function sendCapsule(id) {
     encoded = new TextEncoder().encode(msg);
     ptr = Module._malloc(encoded.length);
     Module.HEAPU8.set(encoded, ptr);
-    Module._somakernel_submit_to(busPtr, lane, ptr, encoded.length);
+    Module._umsbb_submit_to(busPtr, lane, ptr, encoded.length);
     Module._free(ptr);
     logFeedback(`🧪 Producer ${id} → Lane ${lane}: "${msg}"`);
   }
 };
 
 window.drainCapsule = function drainCapsule(lane) {
-  Module._somakernel_drain_from(busPtr, lane);
+  Module._umsbb_drain_from(busPtr, lane);
   logFeedback(`🔁 Drained Lane ${lane}`);
 };
 
@@ -101,7 +101,7 @@ function pollFeedback() {
 
   try {
     const countPtr = Module._malloc(4);
-    const fbPtr = Module._somakernel_get_feedback(busPtr, countPtr);
+    const fbPtr = Module._umsbb_get_feedback(busPtr, countPtr);
     const count = Module.HEAPU32[countPtr >> 2];
 
     for (let i = 0; i < count && i < 50; i++) {

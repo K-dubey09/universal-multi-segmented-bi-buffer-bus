@@ -10,7 +10,7 @@
 #include "event_scheduler.h"
 
 /*
-Somakernel Bus Interface
+Universal Multi-Segmented Bi-Buffer Bus Interface
 
 Mutation-grade conductor for capsule transport.
 
@@ -35,14 +35,14 @@ typedef struct {
     FlowControl flow;
     EventScheduler scheduler;
     size_t sequence;
-} SomakernelBus;
+} UniversalMultiSegmentedBiBufferBus;
 
-SomakernelBus* somakernel_init(size_t bufCap, size_t arenaCap);
-void somakernel_submit(SomakernelBus* bus, const char* msg, size_t size);
-void somakernel_drain(SomakernelBus* bus);
-void somakernel_free(SomakernelBus* bus);
-void somakernel_submit_to(SomakernelBus* bus, size_t laneIndex, const char* msg, size_t size);
-void somakernel_drain_from(SomakernelBus* bus, size_t laneIndex);
+UniversalMultiSegmentedBiBufferBus* umsbb_init(size_t bufCap, size_t arenaCap);
+void umsbb_submit(UniversalMultiSegmentedBiBufferBus* bus, const char* msg, size_t size);
+void umsbb_drain(UniversalMultiSegmentedBiBufferBus* bus);
+void umsbb_free(UniversalMultiSegmentedBiBufferBus* bus);
+void umsbb_submit_to(UniversalMultiSegmentedBiBufferBus* bus, size_t laneIndex, const char* msg, size_t size);
+void umsbb_drain_from(UniversalMultiSegmentedBiBufferBus* bus, size_t laneIndex);
 
 // 🧾 Feedback accessor for JS polling
-FeedbackEntry* somakernel_get_feedback(SomakernelBus* bus, size_t* count);
+FeedbackEntry* umsbb_get_feedback(UniversalMultiSegmentedBiBufferBus* bus, size_t* count);

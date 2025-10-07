@@ -1,9 +1,13 @@
 #!/usr/bin/env powershell
 
-# WebAssembly Build Script for Somakernel
+# WebAssembly B    if (Test-Path "universal_multi_segmented_bi_buffer_bus.js" -and Test-Path "universal_multi_segmented_bi_buffer_bus.wasm") {
+        Write-Host "✅ Build successful!" -ForegroundColor Green
+        Write-Host "Generated files:" -ForegroundColor Cyan
+        Write-Host "  - universal_multi_segmented_bi_buffer_bus.js ($(((Get-Item universal_multi_segmented_bi_buffer_bus.js).Length / 1KB).ToString('F1')) KB)" -ForegroundColor Gray
+        Write-Host "  - universal_multi_segmented_bi_buffer_bus.wasm ($(((Get-Item universal_multi_segmented_bi_buffer_bus.wasm).Length / 1KB).ToString('F1')) KB)" -ForegroundColor GrayScript for Universal Multi-Segmented Bi-Buffer Bus
 # Requires Emscripten SDK to be in PATH
 
-Write-Host "🚀 Building Somakernel for WebAssembly..." -ForegroundColor Green
+Write-Host "🚀 Building Universal Multi-Segmented Bi-Buffer Bus for WebAssembly..." -ForegroundColor Green
 
 # Check if emcc is available
 if (!(Get-Command emcc -ErrorAction SilentlyContinue)) {
@@ -24,12 +28,12 @@ $buildCmd = @(
     "emcc"
     $sourceList
     "-Iinclude"
-    "-o somakernel.js"
-    "-s EXPORTED_FUNCTIONS=`"['_somakernel_init','_somakernel_submit_to','_somakernel_drain_from','_somakernel_get_feedback','_malloc','_free']`""
+    "-o universal_multi_segmented_bi_buffer_bus.js"
+    "-s EXPORTED_FUNCTIONS=`"['_umsbb_init','_umsbb_submit_to','_umsbb_drain_from','_umsbb_get_feedback','_malloc','_free']`""
     "-s EXPORTED_RUNTIME_METHODS=`"['HEAPU8','HEAPU32']`""
     "-s ALLOW_MEMORY_GROWTH=1"
     "-s MODULARIZE=1" 
-    "-s EXPORT_NAME=`"'SomakernelModule'`""
+    "-s EXPORT_NAME=`"'UniversalMultiSegmentedBiBufferBusModule'`""
     "-s TOTAL_STACK=1MB"
     "-s INITIAL_MEMORY=16MB"
     "-O2"
@@ -51,14 +55,14 @@ try {
         # Create simple test
         Write-Host "🧪 Creating test file..." -ForegroundColor Yellow
         @'
-// Test Somakernel WASM Module
-const SomakernelModule = require('./somakernel.js');
+// Test Universal Multi-Segmented Bi-Buffer Bus WASM Module
+const UniversalMultiSegmentedBiBufferBusModule = require('./universal_multi_segmented_bi_buffer_bus.js');
 
-SomakernelModule().then(Module => {
-    console.log('🚀 Somakernel WASM Module Loaded');
+UniversalMultiSegmentedBiBufferBusModule().then(Module => {
+    console.log('🚀 Universal Multi-Segmented Bi-Buffer Bus WASM Module Loaded');
     
     // Test basic functions
-    const bus = Module._somakernel_init(1024, 2048);
+    const bus = Module._umsbb_init(1024, 2048);
     console.log('✅ Bus initialized:', bus);
     
     // Submit test message
@@ -66,23 +70,23 @@ SomakernelModule().then(Module => {
     const msgPtr = Module._malloc(testMsg.length + 1);
     Module.writeStringToMemory(testMsg, msgPtr);
     
-    Module._somakernel_submit_to(bus, 0, msgPtr, testMsg.length);
+    Module._umsbb_submit_to(bus, 0, msgPtr, testMsg.length);
     console.log('📤 Message submitted');
     
     // Drain message
-    Module._somakernel_drain_from(bus, 0);
+    Module._umsbb_drain_from(bus, 0);
     console.log('📥 Message drained');
     
     // Get feedback
     const countPtr = Module._malloc(4);
-    const feedbackPtr = Module._somakernel_get_feedback(bus, countPtr);
+    const feedbackPtr = Module._umsbb_get_feedback(bus, countPtr);
     const count = Module.getValue(countPtr, 'i32');
     console.log('🧾 Feedback entries:', count);
     
     // Cleanup
     Module._free(msgPtr);
     Module._free(countPtr);
-    Module._somakernel_free(bus);
+    Module._umsbb_free(bus);
     
     console.log('✅ Test completed successfully!');
 }).catch(err => {

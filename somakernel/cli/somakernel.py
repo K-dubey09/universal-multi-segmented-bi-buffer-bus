@@ -7,11 +7,11 @@ def find_library():
 	root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 	candidates = []
 	if sys.platform == 'win32':
-		candidates = ['somakernel.dll', 'libsomakernel.dll', 'somakernel.so']
+		candidates = ['universal_multi_segmented_bi_buffer_bus.dll', 'libuniversal_multi_segmented_bi_buffer_bus.dll', 'universal_multi_segmented_bi_buffer_bus.so']
 	elif sys.platform == 'darwin':
-		candidates = ['libsomakernel.dylib', 'libsomakernel.so']
+		candidates = ['libuniversal_multi_segmented_bi_buffer_bus.dylib', 'libuniversal_multi_segmented_bi_buffer_bus.so']
 	else:
-		candidates = ['libsomakernel.so', 'somakernel.so', 'somakernel.dll']
+		candidates = ['libuniversal_multi_segmented_bi_buffer_bus.so', 'universal_multi_segmented_bi_buffer_bus.so', 'universal_multi_segmented_bi_buffer_bus.dll']
 
 	for name in candidates:
 		path = os.path.join(root, name)
@@ -36,7 +36,7 @@ def find_library():
 
 libpath = find_library()
 if not libpath:
-	sys.stderr.write("Could not find a built shared library (libsomakernel).\n")
+	sys.stderr.write("Could not find a built shared library (libuniversal_multi_segmented_bi_buffer_bus).\n")
 	sys.stderr.write("Build a shared library with CMake before running this script.\n")
 	sys.stderr.write("Example (PowerShell):\n")
 	sys.stderr.write("  mkdir build; cd build; cmake ..; cmake --build . --config Release\n")
@@ -51,39 +51,39 @@ except Exception as e:
 	sys.exit(1)
 
 try:
-	lib.somakernel_init.restype = ctypes.c_void_p
-	lib.somakernel_submit.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t]
-	lib.somakernel_drain.argtypes = [ctypes.c_void_p]
-	lib.somakernel_free.argtypes = [ctypes.c_void_p]
+	lib.umsbb_init.restype = ctypes.c_void_p
+	lib.umsbb_submit.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t]
+	lib.umsbb_drain.argtypes = [ctypes.c_void_p]
+	lib.umsbb_free.argtypes = [ctypes.c_void_p]
 	print("Function prototypes set")
 except Exception as e:
 	print("Failed to set function prototypes:", e)
 	sys.exit(1)
 
 try:
-	bus = lib.somakernel_init(1024, 2048)
-	print("somakernel_init returned", bus)
+	bus = lib.umsbb_init(1024, 2048)
+	print("umsbb_init returned", bus)
 except Exception as e:
-	print("somakernel_init failed:", e)
+	print("umsbb_init failed:", e)
 	sys.exit(1)
 
 try:
-	lib.somakernel_submit(bus, b"Capsule from Python", 20)
-	print("somakernel_submit OK")
+	lib.umsbb_submit(bus, b"Capsule from Python", 20)
+	print("umsbb_submit OK")
 except Exception as e:
-	print("somakernel_submit failed:", e)
+	print("umsbb_submit failed:", e)
 	sys.exit(1)
 
 try:
-	lib.somakernel_drain(bus)
-	print("somakernel_drain OK")
+	lib.umsbb_drain(bus)
+	print("umsbb_drain OK")
 except Exception as e:
-	print("somakernel_drain failed:", e)
+	print("umsbb_drain failed:", e)
 	sys.exit(1)
 
 try:
-	lib.somakernel_free(bus)
-	print("somakernel_free OK")
+	lib.umsbb_free(bus)
+	print("umsbb_free OK")
 except Exception as e:
-	print("somakernel_free failed:", e)
+	print("umsbb_free failed:", e)
 	sys.exit(1)

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <time.h>
 
-SomakernelBus* somakernel_init(size_t bufCap, size_t arenaCap) {
-    SomakernelBus* bus = malloc(sizeof(SomakernelBus));
+UniversalMultiSegmentedBiBufferBus* umsbb_init(size_t bufCap, size_t arenaCap) {
+    UniversalMultiSegmentedBiBufferBus* bus = malloc(sizeof(UniversalMultiSegmentedBiBufferBus));
     segment_ring_init(&bus->ring, 4, bufCap);
     arena_init(&bus->arena, arenaCap);
     feedback_clear(&bus->feedback);
@@ -15,13 +15,13 @@ SomakernelBus* somakernel_init(size_t bufCap, size_t arenaCap) {
     return bus;
 }
 
-void somakernel_submit(SomakernelBus* bus, const char* msg, size_t size) {
+void umsbb_submit(UniversalMultiSegmentedBiBufferBus* bus, const char* msg, size_t size) {
     size_t lane = bus->ring.currentIndex;
-    somakernel_submit_to(bus, lane, msg, size);
+    umsbb_submit_to(bus, lane, msg, size);
     bus->ring.currentIndex = (lane + 1) % bus->ring.activeCount;
 }
 
-void somakernel_submit_to(SomakernelBus* bus, size_t laneIndex, const char* msg, size_t size) {
+void umsbb_submit_to(UniversalMultiSegmentedBiBufferBus* bus, size_t laneIndex, const char* msg, size_t size) {
     if (laneIndex >= bus->ring.activeCount) return;
     BiBuffer* target = &bus->ring.buffers[laneIndex];
 
@@ -78,13 +78,13 @@ void somakernel_submit_to(SomakernelBus* bus, size_t laneIndex, const char* msg,
     }
 }
 
-void somakernel_drain(SomakernelBus* bus) {
+void umsbb_drain(UniversalMultiSegmentedBiBufferBus* bus) {
     size_t lane = bus->ring.currentIndex;
-    somakernel_drain_from(bus, lane);
+    umsbb_drain_from(bus, lane);
     bus->ring.currentIndex = (lane + 1) % bus->ring.activeCount;
 }
 
-void somakernel_drain_from(SomakernelBus* bus, size_t laneIndex) {
+void umsbb_drain_from(UniversalMultiSegmentedBiBufferBus* bus, size_t laneIndex) {
     if (laneIndex >= bus->ring.activeCount) return;
     BiBuffer* buf = &bus->ring.buffers[laneIndex];
 
@@ -141,12 +141,12 @@ void somakernel_drain_from(SomakernelBus* bus, size_t laneIndex) {
     }
 }
 
-FeedbackEntry* somakernel_get_feedback(SomakernelBus* bus, size_t* count) {
+FeedbackEntry* umsbb_get_feedback(UniversalMultiSegmentedBiBufferBus* bus, size_t* count) {
     *count = bus->feedback.count;
     return bus->feedback.entries;
 }
 
-void somakernel_free(SomakernelBus* bus) {
+void umsbb_free(UniversalMultiSegmentedBiBufferBus* bus) {
     for (size_t i = 0; i < bus->ring.activeCount; ++i) {
         bi_buffer_destroy(&bus->ring.buffers[i]);
     }

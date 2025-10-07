@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-/* Portable, minimal atomic helpers used by somakernel.
+/* Portable, minimal atomic helpers used by universal-multi-segmented-bi-buffer-bus.
  * On compilers with <stdatomic.h> we alias to the standard API.
  * On MSVC C builds we provide simple fallbacks using Windows
  * interlocked primitives where possible.

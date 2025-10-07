@@ -20,7 +20,7 @@ double get_time() {
 }
 #endif
 
-void benchmark_submit_performance(SomakernelBus* bus, int iterations) {
+void benchmark_submit_performance(UniversalMultiSegmentedBiBufferBus* bus, int iterations) {
     printf("🚀 Submit Performance Benchmark\n");
     printf("================================\n");
     
@@ -30,7 +30,7 @@ void benchmark_submit_performance(SomakernelBus* bus, int iterations) {
     double startTime = get_time();
     
     for (int i = 0; i < iterations; ++i) {
-        somakernel_submit_to(bus, i % bus->ring.activeCount, testMsg, msgSize);
+        umsbb_submit_to(bus, i % bus->ring.activeCount, testMsg, msgSize);
     }
     
     double endTime = get_time();
@@ -45,14 +45,14 @@ void benchmark_submit_performance(SomakernelBus* bus, int iterations) {
     printf("\n");
 }
 
-void benchmark_drain_performance(SomakernelBus* bus, int iterations) {
+void benchmark_drain_performance(UniversalMultiSegmentedBiBufferBus* bus, int iterations) {
     printf("📥 Drain Performance Benchmark\n");
     printf("==============================\n");
     
     double startTime = get_time();
     
     for (int i = 0; i < iterations; ++i) {
-        somakernel_drain_from(bus, i % bus->ring.activeCount);
+        umsbb_drain_from(bus, i % bus->ring.activeCount);
     }
     
     double endTime = get_time();
@@ -67,7 +67,7 @@ void benchmark_drain_performance(SomakernelBus* bus, int iterations) {
     printf("\n");
 }
 
-void benchmark_feedback_performance(SomakernelBus* bus, int iterations) {
+void benchmark_feedback_performance(UniversalMultiSegmentedBiBufferBus* bus, int iterations) {
     printf("🧾 Feedback Performance Benchmark\n");
     printf("=================================\n");
     
@@ -75,7 +75,7 @@ void benchmark_feedback_performance(SomakernelBus* bus, int iterations) {
     
     for (int i = 0; i < iterations; ++i) {
         size_t count;
-        FeedbackEntry* entries = somakernel_get_feedback(bus, &count);
+        FeedbackEntry* entries = umsbb_get_feedback(bus, &count);
         (void)entries; // Suppress unused variable warning
     }
     
@@ -92,13 +92,13 @@ void benchmark_feedback_performance(SomakernelBus* bus, int iterations) {
 }
 
 int main() {
-    printf("⚡ Somakernel Performance Benchmark Suite\n");
-    printf("==========================================\n");
+    printf("⚡ Universal Multi-Segmented Bi-Buffer Bus Performance Benchmark Suite\n");
+    printf("======================================================================\n");
     printf("Platform: Windows (compiled with GCC)\n");
     printf("Timestamp: %ld\n\n", (long)time(NULL));
     
     // Initialize with larger capacity for benchmarking
-    SomakernelBus* bus = somakernel_init(64 * 1024, 128 * 1024); // 64KB buffers, 128KB arena
+    UniversalMultiSegmentedBiBufferBus* bus = umsbb_init(64 * 1024, 128 * 1024); // 64KB buffers, 128KB arena
     printf("✅ Bus initialized with %zu segments\n", bus->ring.activeCount);
     printf("Buffer capacity: %zu bytes\n", bus->ring.buffers[0].capacity);
     printf("Arena capacity: %zu bytes\n\n", bus->arena.capacity);
@@ -119,7 +119,7 @@ int main() {
     printf("📊 Final Statistics\n");
     printf("===================\n");
     size_t feedbackCount;
-    FeedbackEntry* entries = somakernel_get_feedback(bus, &feedbackCount);
+    FeedbackEntry* entries = umsbb_get_feedback(bus, &feedbackCount);
     
     // Count feedback types
     int okCount = 0, cpuCount = 0, gpuCount = 0, throttledCount = 0, skippedCount = 0, idleCount = 0;
@@ -147,7 +147,7 @@ int main() {
     printf("Success rate: %.1f%%\n", successRate);
     
     printf("\n🧹 Cleanup and exit...\n");
-    somakernel_free(bus);
+    umsbb_free(bus);
     printf("✅ Benchmark completed successfully!\n");
     
     return 0;
