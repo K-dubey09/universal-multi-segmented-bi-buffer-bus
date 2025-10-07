@@ -65,20 +65,18 @@ void somakernel_drain_from(SomakernelBus* bus, size_t laneIndex) {
     if (laneIndex >= bus->ring.activeCount) return;
     BiBuffer* buf = &bus->ring.buffers[laneIndex];
 
-    if (!event_check(&bus->scheduler)) {
+    size_t size;
+    void* ptr = bi_buffer_read(buf, &size);
+    if (!ptr) {
         FeedbackEntry fb = {
             .sequence = bus->sequence,
             .type = FEEDBACK_IDLE,
-            .note = "No signal to drain",
+            .note = "No data to drain",
             .timestamp = (uint64_t)time(NULL)
         };
         feedback_push(&bus->feedback, fb);
         return;
     }
-
-    size_t size;
-    void* ptr = bi_buffer_read(buf, &size);
-    if (!ptr) return;
 
     MessageCapsule* cap = (MessageCapsule*)ptr;
     FeedbackEntry fb = {
@@ -101,7 +99,19 @@ void somakernel_drain_from(SomakernelBus* bus, size_t laneIndex) {
 
     feedback_push(&bus->feedback, fb);
     bi_buffer_release(buf);
-    event_clear(&bus->scheduler);
+    
+    // Only clear event if no more data is available across all buffers
+    bool hasMoreData = false;
+    for (size_t i = 0; i < bus->ring.activeCount; ++i) {
+        size_t testSize;
+        if (bi_buffer_read(&bus->ring.buffers[i], &testSize)) {
+            hasMoreData = true;
+            break;
+        }
+    }
+    if (!hasMoreData) {
+        event_clear(&bus->scheduler);
+    }
 }
 
 FeedbackEntry* somakernel_get_feedback(SomakernelBus* bus, size_t* count) {
