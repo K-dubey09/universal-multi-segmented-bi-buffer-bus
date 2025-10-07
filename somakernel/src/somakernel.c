@@ -36,7 +36,21 @@ void somakernel_submit_to(SomakernelBus* bus, size_t laneIndex, const char* msg,
         return;
     }
 
+    // Check adaptive batching - accumulate multiple messages if beneficial
+    size_t batchSize = batch_next(&bus->batch, 85); // Assume 85% success rate for now
+    
     MessageCapsule* cap = arena_alloc(&bus->arena, sizeof(MessageCapsule));
+    if (!cap) {
+        FeedbackEntry fb = {
+            .sequence = bus->sequence,
+            .type = FEEDBACK_SKIPPED,
+            .note = "Arena allocation failed",
+            .timestamp = (uint64_t)time(NULL)
+        };
+        feedback_push(&bus->feedback, fb);
+        return;
+    }
+    
     capsule_wrap(cap, bus->sequence++, msg, size);
 
     void* ptr = bi_buffer_claim(target, sizeof(MessageCapsule));
@@ -44,6 +58,15 @@ void somakernel_submit_to(SomakernelBus* bus, size_t laneIndex, const char* msg,
         memcpy(ptr, cap, sizeof(MessageCapsule));
         bi_buffer_commit(target, ptr, sizeof(MessageCapsule));
         event_signal(&bus->scheduler);
+        
+        // Track successful submission for batching feedback
+        FeedbackEntry fb = {
+            .sequence = cap->header.sequence,
+            .type = FEEDBACK_OK,
+            .note = "Message submitted successfully",
+            .timestamp = (uint64_t)time(NULL)
+        };
+        feedback_push(&bus->feedback, fb);
     } else {
         FeedbackEntry fb = {
             .sequence = cap->header.sequence,
@@ -88,17 +111,21 @@ void somakernel_drain_from(SomakernelBus* bus, size_t laneIndex) {
 
     if (!capsule_validate(cap)) {
         fb.type = FEEDBACK_CORRUPTED;
-        fb.note = "Checksum mismatch";
+        fb.note = "Checksum mismatch - state machine integrity failure";
     } else if (try_gpu_execute(cap->payload, cap->size)) {
         fb.type = FEEDBACK_GPU_EXECUTED;
-        fb.note = "Executed on GPU";
+        fb.note = "GPU acceleration successful";
+        // Update batch performance metrics
+        batch_next(&bus->batch, 95); // High success rate for GPU
     } else {
         fb.type = FEEDBACK_CPU_EXECUTED;
-        fb.note = "Executed on CPU";
+        fb.note = "CPU fallback execution";
+        // Update batch performance metrics  
+        batch_next(&bus->batch, 75); // Lower success rate for CPU
     }
 
     feedback_push(&bus->feedback, fb);
-    bi_buffer_release(buf);
+    bi_buffer_release(buf); // This transitions through FEEDBACK → FREE
     
     // Only clear event if no more data is available across all buffers
     bool hasMoreData = false;
