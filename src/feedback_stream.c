@@ -19,7 +19,7 @@ void feedback_render(const FeedbackStream* stream) {
             (e->type == FEEDBACK_SKIPPED) ? "SKIPPED" :
             (e->type == FEEDBACK_IDLE) ? "IDLE" : "UNKNOWN";
 
-        printf("Capsule %u [%s]: %s @ %llu\n", e->sequence, typeStr, e->note, e->timestamp);
+    printf("Capsule %u [%s]: %s @ %llu\n", e->sequence, typeStr, e->note, (unsigned long long)e->timestamp);
     }
 }
 

@@ -67,6 +67,10 @@ bool fast_lane_init(fast_lane_manager_t* manager);
 void fast_lane_destroy(fast_lane_manager_t* manager);
 
 // Lane selection based on message characteristics
+
+// Forward declaration of metrics struct to allow pointer use in prototypes
+struct lane_metrics;
+
 lane_type_t fast_lane_select_optimal(size_t message_size, uint32_t priority, bool latency_critical);
 
 // High-performance message operations

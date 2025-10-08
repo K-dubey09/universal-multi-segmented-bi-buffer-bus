@@ -51,8 +51,9 @@ void benchmark_drain_performance(UniversalMultiSegmentedBiBufferBus* bus, int it
     
     double startTime = get_time();
     
+    size_t recv_size = 0;
     for (int i = 0; i < iterations; ++i) {
-        umsbb_drain_from(bus, i % bus->ring.activeCount);
+        umsbb_drain_from(bus, i % bus->ring.activeCount, &recv_size);
     }
     
     double endTime = get_time();
