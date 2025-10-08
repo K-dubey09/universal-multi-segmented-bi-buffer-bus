@@ -62,14 +62,21 @@ typedef struct {
     uint32_t active_consumers;
 } fast_lane_manager_t;
 
+// Performance metrics structure (declare before API prototypes)
+struct lane_metrics {
+    uint64_t messages_per_second;
+    uint64_t bytes_per_second;
+    double avg_latency_us;
+    double p99_latency_us;
+    uint32_t congestion_level;
+    double utilization_percent;
+};
+
 // Fast Lane API
 bool fast_lane_init(fast_lane_manager_t* manager);
 void fast_lane_destroy(fast_lane_manager_t* manager);
 
 // Lane selection based on message characteristics
-
-// Forward declaration of metrics struct to allow pointer use in prototypes
-struct lane_metrics;
 
 lane_type_t fast_lane_select_optimal(size_t message_size, uint32_t priority, bool latency_critical);
 
@@ -80,12 +87,3 @@ void* fast_lane_drain(fast_lane_manager_t* manager, lane_type_t lane, size_t* si
 // Performance monitoring
 void fast_lane_get_metrics(fast_lane_manager_t* manager, lane_type_t lane, struct lane_metrics* metrics);
 double fast_lane_get_system_throughput(fast_lane_manager_t* manager);
-
-struct lane_metrics {
-    uint64_t messages_per_second;
-    uint64_t bytes_per_second;
-    double avg_latency_us;
-    double p99_latency_us;
-    uint32_t congestion_level;
-    double utilization_percent;
-};

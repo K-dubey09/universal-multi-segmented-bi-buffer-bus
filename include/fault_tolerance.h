@@ -130,12 +130,7 @@ bool fault_tolerance_disable_component(fault_tolerance_manager_t* manager, uint3
 bool fault_tolerance_isolate_component(fault_tolerance_manager_t* manager, uint32_t component_id);
 
 // Diagnostics and metrics
-// Forward declaration for metrics struct
-struct fault_tolerance_metrics;
-
-void fault_tolerance_get_metrics(fault_tolerance_manager_t* manager, struct fault_tolerance_metrics* metrics);
-void fault_tolerance_generate_health_report(fault_tolerance_manager_t* manager, char* report, size_t report_size);
-
+// Diagnostics and metrics
 struct fault_tolerance_metrics {
     uint64_t total_faults;
     uint64_t active_faults;
@@ -147,3 +142,6 @@ struct fault_tolerance_metrics {
     uint64_t messages_persisted;
     uint64_t messages_recovered;
 };
+
+void fault_tolerance_get_metrics(fault_tolerance_manager_t* manager, struct fault_tolerance_metrics* metrics);
+void fault_tolerance_generate_health_report(fault_tolerance_manager_t* manager, char* report, size_t report_size);

@@ -82,6 +82,18 @@ typedef struct {
     char error_message[64];
 } feedback_message_t;
 
+// Performance metrics struct must be visible before prototypes
+struct handshake_metrics {
+    uint64_t messages_per_second;
+    uint64_t acks_per_second;
+    double delivery_success_rate;
+    double avg_ack_latency_us;
+    double p99_ack_latency_us;
+    uint32_t pending_messages;
+    uint32_t retry_rate;
+    uint64_t total_timeouts;
+};
+
 // Handshake API
 bool handshake_init(handshake_manager_t* manager, uint32_t capacity);
 void handshake_destroy(handshake_manager_t* manager);
@@ -107,14 +119,3 @@ uint32_t handshake_get_pending_count(handshake_manager_t* manager, uint32_t prod
 
 // Performance monitoring
 void handshake_get_metrics(handshake_manager_t* manager, struct handshake_metrics* metrics);
-
-struct handshake_metrics {
-    uint64_t messages_per_second;
-    uint64_t acks_per_second;
-    double delivery_success_rate;
-    double avg_ack_latency_us;
-    double p99_ack_latency_us;
-    uint32_t pending_messages;
-    uint32_t retry_rate;
-    uint64_t total_timeouts;
-};
