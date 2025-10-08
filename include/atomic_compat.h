@@ -6,12 +6,21 @@
 
 #ifdef _MSC_VER
     // MSVC specific includes and definitions
+    // Prevent windows.h from pulling in winsock.h (which conflicts with winsock2.h)
+    #ifndef WIN32_LEAN_AND_MEAN
+    #define WIN32_LEAN_AND_MEAN
+    #endif
     #include <windows.h>
     #include <intrin.h>
     
     // Use MSVC intrinsics instead of C11 atomics
     #define _Atomic(T) volatile T
     #define _Alignas(x) __declspec(align(x))
+
+    // Public macro used across the project for annotating atomic fields
+    #ifndef UMSBB_ATOMIC
+    #define UMSBB_ATOMIC(T) volatile T
+    #endif
     
     typedef volatile long atomic_int;
     typedef volatile unsigned long atomic_uint;
