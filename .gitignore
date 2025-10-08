@@ -35,8 +35,8 @@ imgui.ini
 # Dependencies and external libraries
 node_modules/
 vcpkg/
-*emsdk/
-*/emsdk/
+# Local emsdk installations (not submodules)
+emsdk/
 downloads/
 packages/
 buildtrees/
