@@ -213,6 +213,10 @@ int main() {    <title>UMSBB Example</title>
 ### WebAssembly (Simple)        }
 
 ```bash
+# First, ensure Emscripten submodule is initialized
+git submodule update --init tools/emsdk
+source tools/emsdk/emsdk_env.sh  # Linux/macOS
+# or tools\emsdk\emsdk_env.bat    # Windows
 
 # Requires Emscripten SDK        ┌─────────────────────────────────────────────────────────────┐
 
@@ -1042,7 +1046,13 @@ universal-multi-segmented-bi-buffer-bus/
 ### WebAssembly (Optional)│   │   ├── gpu_accelerated_buffer.h    # GPU acceleration API
 
 - **Emscripten SDK**: For WebAssembly compilation│   │   └── web_controller.h            # Web interface API
-
+  ```bash
+  # Initialize the Emscripten submodule
+  git submodule update --init --recursive
+  
+  # Or if cloning fresh:
+  git clone --recursive https://github.com/your-repo/universal-multi-segmented-bi-buffer-bus
+  ```
 - **Node.js**: For testing JavaScript components│   └── src/
 
 │       ├── gpu_accelerated_buffer.c    # GPU implementation
