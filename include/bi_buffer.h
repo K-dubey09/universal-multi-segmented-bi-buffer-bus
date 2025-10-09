@@ -1,7 +1,7 @@
 /*
  * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - Bi-Buffer Header
  * 
- * Copyright (c) 2025 UMSBB Development Team
+ * Copyright (c) 2025 Kushagra Dubey
  * Licensed under the MIT License - see LICENSE file for details.
  */
 

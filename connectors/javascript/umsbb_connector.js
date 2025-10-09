@@ -1,7 +1,7 @@
 ﻿/*
  * Universal Multi-Segmented Bi-Buffer Bus (UMSBB) - JavaScript Connector v4.0
  * 
- * Copyright (c) 2025 UMSBB Development Team
+ * Copyright (c) 2025 Kushagra Dubey
  * Licensed under the MIT License - see LICENSE file for details.
  * 
  * High-performance WebAssembly interface for UMSBB ring buffer system

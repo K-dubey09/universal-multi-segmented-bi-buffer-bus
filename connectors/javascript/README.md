@@ -323,7 +323,7 @@ connectors/javascript/
 
 MIT License - see the main UMSBB project for details.
 
-Copyright (c) 2025 UMSBB Development Team
+Copyright (c) 2025 Kushagra Dubey
 
 ## Contributing
 

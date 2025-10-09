@@ -16,7 +16,7 @@
     "typescript",
     "high-performance"
   ],
-  "author": "UMSBB Development Team",
+  "author": "Kushagra Dubey",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
