@@ -33,9 +33,23 @@ jobs:
           -DBUILD_BENCHMARKS=OFF \
           -DBUILD_V3_TESTS=OFF
 
+    - name: Install build dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y build-essential ca-certificates cmake ninja-build python3 python3-pip pkg-config
+        # optional: useful tools for caching and speed
+        sudo apt-get install -y ccache
+
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -- -j$(nproc)
+      run: |
+        # Use the number of available processors on the runner
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -- -j$(nproc)
+        else
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        fi
 
     - name: Test
       working-directory: ${{github.workspace}}/build
